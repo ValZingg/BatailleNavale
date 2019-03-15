@@ -4,6 +4,7 @@
 #include <strings.h>
 #include <stdbool.h>
 
+
 void menuaide() {
     system("cls");
     printf("-----COMMENT JOUER?-----\n");
@@ -47,9 +48,23 @@ void afficherCarte(char tableau[10][10]) {
     }
 } //Affiche la carte
 
+int CartePerso(int tableau[10][10]){
+    //TODO : Corriger cette immondisse.
+    int chiffre = 0;
+    FILE * fichier;
+    fichier = fopen("CarteCustom.BATAILLENAVALE", "r");
+    if(fichier == NULL)printf("Erreur ! Fichier introuvable.\n");
+
+    chiffre = fgetc(fichier);
+    fscanf(fichier,"%d",&chiffre);
+    printf("%d", chiffre);
+    return chiffre;
+
+}
+
 
 int main() {
-    //---Les variables habitent ci dessous...---
+    //---VARIABLES---
     char NomJoueur[255] ="NULL"; //Nom du joueur
     int ChoixMenu = 0;
     int ChoixTirVERTICAL;
@@ -59,6 +74,8 @@ int main() {
     int HpBateau1 = 1; // Points de vie du bateau 1
     int HpBateau2 = 2; // Points de vie du bateau 2
     int HpBateau3 = 3; // Points de vie du bateau 3
+    int i = 0;//utilisé pour les boucles for
+    int j = 0;//utilisé pour les boucles for
     bool jeu_en_cours = true;
 
     int TableauNaval[10][10]={ //cette carte est invisible au joueur
@@ -73,6 +90,7 @@ int main() {
            0,0,0,0,0,0,0,0,0,0,
            0,0,0,0,0,0,0,0,0,0,
     };
+    int TableauCustom[10][10];
     char TableauAffiche[10][10]={ //La carte qui va s'afficher au joueur
             "~~~~~~~~~~",
             "~~~~~~~~~~",
@@ -85,7 +103,7 @@ int main() {
             "~~~~~~~~~~",
             "~~~~~~~~~~",
     };
-    //---Les variables habitent ci dessus...---
+    //---VARIABLES---
 
     //Input du nom du joueur
     printf("Entrez votre nom :");
@@ -97,8 +115,9 @@ int main() {
     //Affichage du menu principal
     printf("----------BATAILLE NAVALE----------\n\n");
     printf("1.Jouer\n");
-    printf("2.Aide\n");
-    printf("3.Quitter\n");
+    printf("2.Jouer avec une carte personalisee\n");
+    printf("3.Aide\n");
+    printf("4.Quitter\n");
     scanf("%d",&ChoixMenu);
 
     switch(ChoixMenu)
@@ -112,11 +131,29 @@ int main() {
             //Sors du switch et commence le jeu plus bas
             break;
 
-        case 2: // AIDE
+        case 2: //JOUER AVEC UNE CARTE STOCKEE DANS UN FICHIER
+            system("cls");
+            int chiffre = 0; // variable utilisée pour assigner les cases de la grille
+            FILE * fichier; //variable du fichier
+            fichier = fopen("CarteCustom.BATAILLENAVALE", "r"); //ouvre le fichier de la grille
+            if(fichier == NULL)printf("Erreur ! Fichier introuvable.\n"); // Erreur si le fichier n'est pas trouvé
+
+            for(j = 0;j < 10;j++)
+            {
+                for(i = 0; i < 10; i++)
+                {
+                    fscanf(fichier,"%d",&chiffre); //Scanne et stock la valeur de la ligne actuelle en int
+                    TableauNaval[j][i] = chiffre; //Assigne la valeur stockée à la case de la grille actuelle
+                }
+            }
+            break;
+
+        case 3:
+            // AIDE
             menuaide(); // Affiche l'aide avec une fonction
             break;
 
-        case 3: //QUITTER
+        case 4://QUITTER
             return 99; //Termine le programme
 
     }
@@ -129,6 +166,7 @@ int main() {
         printf("Entrez la case HORIZONTALE\n");
         scanf("%d",&ChoixTirHORIZONTAL); //demande l'axe horizontal
         system("cls");
+
         afficherCarte(TableauAffiche);
         printf("Veuillez choisir ou tirer...\n");
         printf("Entrez la case VERTICALE\n"); //demande l'axe vertical
@@ -206,7 +244,7 @@ int main() {
         }
     }
 
-    printf("Felecitations ! Vous avez gagne en %d tours !\n\n",NbTirs); //Message de fin du jeu
+    printf("Felicitations ! Vous avez gagne en %d tours !\n\n",NbTirs); //Message de fin du jeu
     system("pause");
     return 0;
 }
