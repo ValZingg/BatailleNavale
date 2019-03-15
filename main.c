@@ -4,13 +4,25 @@
 #include <strings.h>
 #include <stdbool.h>
 
+/*
+ * Auteur : Valentin Zingg
+ * Titre : Bataille Navale
+ * Description : Un jeu ou il faut trouver et couler des bateaux sur une grille.
+ * Date de création : 15 février 2019
+ * Dernière mise à jour : 15 mars 2019
+ */
 
 void menuaide() {
     system("cls");
     printf("-----COMMENT JOUER?-----\n");
     printf("Tout d'abord il faut choisir ou tirer.\n");
     printf("Vous allez choisir la case en tapant un chiffre de 0-9\n");
-    printf("Vous choisirez d'abord l'axe horizontal puis vertical.\n");
+    printf("Vous choisirez d'abord l'axe horizontal puis vertical.\n\n");
+    printf("Il y a toujours 3 Bateaux:\n");
+    printf("Le bateau 1 qui fait 1 CASE\n");
+    printf("Le bateau 2 qui fait 2 CASE\n");
+    printf("Le bateau 3 qui fait 3 CASE\n");
+    printf("<!!!>IL NE PEUT PAS Y AVOIR DE BATEAUX EN DIAGONALE<!!!>\n");
     printf("\n");
     printf("---Types de cases---\n");
     printf("~ = Eau (case ou vous n'avez pas encore tire)\n");
@@ -20,15 +32,17 @@ void menuaide() {
     system("cls");
 } // Affiche l'aide
 
-void afficherCarte(char tableau[10][10]) {
+void afficherCarte(char tableau[10][10],int tirs,int bateaux,char nomjoueur[255]) {
     int affichercolonne = 0; //variables utilisées dans le for plus bas
     int afficherligne = 0;  // "            "       "    "  "   "    "
     int sautageligne = 0; //Variable qui au bout de 5 saute une ligne , permet de bien aligner les cases
-    int graduationchiffre = 0;//variable pour la graduation verticale
+    int graduationchiffre = 1;//variable pour la graduation verticale
     printf("------------------------------------------\n");
-    printf("|++++++++ LA MER , MON CAPITAINE ++++++++|\n");
+    printf("|++++++++++++++ CAPITAINE %s +++++++++++++|\n",nomjoueur);
+    printf("|++++++++++++++++ TIRS : %d ++++++++++++++|\n",tirs); //affiche le nombre de tirs
+    printf("|++++++++++ BATEAUX RESTANTS : %d ++++++++|\n",bateaux); //affiche le nombre de bateaux restants
     printf("------------------------------------------\n");
-    printf("0  1  2  3  4  5  6  7  8  9\n"); //Graduation horizontale
+    printf("A  B  C  D  E  F  G  H  I  J\n"); //Graduation horizontale
     for(afficherligne = 0; afficherligne < 10; afficherligne++)  //BOUCLE POUR AFFICHER LA CARTE
     {
         for(affichercolonne = 0; affichercolonne < 10; affichercolonne++)
@@ -48,11 +62,55 @@ void afficherCarte(char tableau[10][10]) {
     }
 } //Affiche la carte
 
-
+int TraducteurGrille(char Lettrechoix){
+    int Rendu = 0; //valeur rendue
+    //CETTE FONCTION "TRADUIT" LA LETTRE ENTREE PAR LE JOUEUR EN CHIFFRE QUI PERMET AU PROGRAMME DE L'UTILISER POUR LE TABLEAU
+    if(Lettrechoix == 'A' || Lettrechoix == 'a')
+    {
+        Rendu = 0;
+    }
+    if(Lettrechoix == 'B' || Lettrechoix == 'b')
+    {
+        Rendu = 1;
+    }
+    if(Lettrechoix == 'C' || Lettrechoix == 'c')
+    {
+        Rendu = 2;
+    }
+    if(Lettrechoix == 'D' || Lettrechoix == 'd')
+    {
+        Rendu = 3;
+    }
+    if(Lettrechoix == 'E' || Lettrechoix == 'e')
+    {
+        Rendu = 4;
+    }
+    if(Lettrechoix == 'F' || Lettrechoix == 'f')
+    {
+        Rendu = 5;
+    }
+    if(Lettrechoix == 'G' || Lettrechoix == 'g')
+    {
+        Rendu = 6;
+    }
+    if(Lettrechoix == 'H' || Lettrechoix == 'h')
+    {
+        Rendu = 7;
+    }
+    if(Lettrechoix == 'I' || Lettrechoix == 'i')
+    {
+        Rendu = 8;
+    }
+    if(Lettrechoix == 'J' || Lettrechoix == 'j') {
+        Rendu = 9;
+    }
+    return Rendu;
+}
 
 int main() {
     //---VARIABLES---
     char NomJoueur[255] ="NULL"; //Nom du joueur
+    char ChoixLettreHORIZONTAL;
     int ChoixMenu = 0;
     int ChoixTirVERTICAL;
     int ChoixTirHORIZONTAL;
@@ -91,6 +149,7 @@ int main() {
     };
     //---VARIABLES---
 
+
     //Input du nom du joueur
     printf("Entrez votre nom :");
     scanf("%s",NomJoueur);
@@ -121,10 +180,10 @@ int main() {
             system("cls");
             int chiffre = 0; // variable utilisée pour assigner les cases de la grille
             FILE * fichier; //variable du fichier
-            fichier = fopen("CarteCustom.BATAILLENAVALE", "r"); //ouvre le fichier de la grille
+            fichier = fopen("CartesCustom/CarteCustom1.BATAILLENAVALE", "r"); //ouvre le fichier de la grille
             if(fichier == NULL)printf("Erreur ! Fichier introuvable.\n"); // Erreur si le fichier n'est pas trouvé
 
-            for(j = 0;j < 10;j++)
+            for(j = 0;j < 10;j++) //boucle pour lire les valeurs du fichier grille et les assigner au tableau du jeu
             {
                 for(i = 0; i < 10; i++)
                 {
@@ -144,19 +203,23 @@ int main() {
 
     }
 
-    while(jeu_en_cours == true) // Loop du jeu
+
+    //------------------------------BOUCLE DU JEU---------------------------------------
+    while(jeu_en_cours == true)
     {
-        afficherCarte(TableauAffiche); // Affiche la carte a chaque début de boucle
+        afficherCarte(TableauAffiche,NbTirs,NbBateaux,NomJoueur); // Affiche la carte a chaque début de boucle
         printf("\n");
         printf("Veuillez choisir ou tirer...\n");
-        printf("Entrez la case HORIZONTALE\n");
-        scanf("%d",&ChoixTirHORIZONTAL); //demande l'axe horizontal
+        printf("Entrez la lettre HORIZONTALE\n");
+        scanf(" %c", &ChoixLettreHORIZONTAL); //demande l'axe horizontal
+        ChoixTirHORIZONTAL = TraducteurGrille(ChoixLettreHORIZONTAL);
         system("cls");
 
-        afficherCarte(TableauAffiche);
+        afficherCarte(TableauAffiche,NbTirs,NbBateaux,NomJoueur);
         printf("Veuillez choisir ou tirer...\n");
         printf("Entrez la case VERTICALE\n"); //demande l'axe vertical
         scanf("%d",&ChoixTirVERTICAL);
+        ChoixTirVERTICAL--; //Soustrait la valeur de 1 car la grille commence la graduation à 1 alors que le tableau à 0
 
         //TODO : REMPLACER LES "IF ELSE" PAR UN TRUC PLUS PRATIQUE !
 
@@ -230,7 +293,7 @@ int main() {
         }
     }
 
-    printf("Felicitations ! Vous avez gagne en %d tours !\n\n",NbTirs); //Message de fin du jeu
+    printf("Felicitations ! Vous avez gagne en %d tirs !\n\n",NbTirs); //Message de fin du jeu
     system("pause");
     return 0;
 }
