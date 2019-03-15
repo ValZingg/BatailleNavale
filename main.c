@@ -48,19 +48,6 @@ void afficherCarte(char tableau[10][10]) {
     }
 } //Affiche la carte
 
-int CartePerso(int tableau[10][10]){
-    //TODO : Corriger cette immondisse.
-    int chiffre = 0;
-    FILE * fichier;
-    fichier = fopen("CarteCustom.BATAILLENAVALE", "r");
-    if(fichier == NULL)printf("Erreur ! Fichier introuvable.\n");
-
-    chiffre = fgetc(fichier);
-    fscanf(fichier,"%d",&chiffre);
-    printf("%d", chiffre);
-    return chiffre;
-
-}
 
 
 int main() {
@@ -90,7 +77,6 @@ int main() {
            0,0,0,0,0,0,0,0,0,0,
            0,0,0,0,0,0,0,0,0,0,
     };
-    int TableauCustom[10][10];
     char TableauAffiche[10][10]={ //La carte qui va s'afficher au joueur
             "~~~~~~~~~~",
             "~~~~~~~~~~",
@@ -126,7 +112,7 @@ int main() {
             //rien ici
             break;
 
-        case 1: //JOUER
+        case 1: //JOUER AVEC LA CARTE DE BASE
             system("cls");
             //Sors du switch et commence le jeu plus bas
             break;
