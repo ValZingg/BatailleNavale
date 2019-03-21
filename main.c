@@ -3,111 +3,26 @@
 #include <string.h>
 #include <strings.h>
 #include <stdbool.h>
+#include <windows.h>
+#include "fonctionsjeu.h"
+#include "aidejeu.h"
+
+#pragma execution_character_set ("utf-8")
 
 /*
  * Auteur : Valentin Zingg
  * Titre : Bataille Navale
  * Description : Un jeu ou il faut trouver et couler des bateaux sur une grille.
- * Date de création : 15 février 2019
- * Dernière mise à jour : 15 mars 2019
+ * Date de création : 21 février 2019
+ * Dernière mise à jour : 20 mars 2019
  */
 
-void menuaide() {
-    system("cls");
-    printf("-----COMMENT JOUER?-----\n");
-    printf("Tout d'abord il faut choisir ou tirer.\n");
-    printf("Vous allez choisir la case en tapant un chiffre de 0-9\n");
-    printf("Vous choisirez d'abord l'axe horizontal puis vertical.\n\n");
-    printf("Il y a toujours 3 Bateaux:\n");
-    printf("Le bateau 1 qui fait 1 CASE\n");
-    printf("Le bateau 2 qui fait 2 CASE\n");
-    printf("Le bateau 3 qui fait 3 CASE\n");
-    printf("<!!!>IL NE PEUT PAS Y AVOIR DE BATEAUX EN DIAGONALE<!!!>\n");
-    printf("\n");
-    printf("---Types de cases---\n");
-    printf("~ = Eau (case ou vous n'avez pas encore tire)\n");
-    printf("X = Bateau touche (case ou vous avez tire et touche)\n");
-    printf("@ = Ratage (case ou vous avez tire mais rien n'a ete touche.)\n\n");
-    system("pause");
-    system("cls");
-} // Affiche l'aide
-
-void afficherCarte(char tableau[10][10],int tirs,int bateaux,char nomjoueur[255]) {
-    int affichercolonne = 0; //variables utilisées dans le for plus bas
-    int afficherligne = 0;  // "            "       "    "  "   "    "
-    int sautageligne = 0; //Variable qui au bout de 5 saute une ligne , permet de bien aligner les cases
-    int graduationchiffre = 1;//variable pour la graduation verticale
-    printf("------------------------------------------\n");
-    printf("|++++++++++++++ CAPITAINE %s +++++++++++++|\n",nomjoueur);
-    printf("|++++++++++++++++ TIRS : %d ++++++++++++++|\n",tirs); //affiche le nombre de tirs
-    printf("|++++++++++ BATEAUX RESTANTS : %d ++++++++|\n",bateaux); //affiche le nombre de bateaux restants
-    printf("------------------------------------------\n");
-    printf("A  B  C  D  E  F  G  H  I  J\n"); //Graduation horizontale
-    for(afficherligne = 0; afficherligne < 10; afficherligne++)  //BOUCLE POUR AFFICHER LA CARTE
-    {
-        for(affichercolonne = 0; affichercolonne < 10; affichercolonne++)
-        {
-
-            printf("%c",tableau[afficherligne][affichercolonne]);
-            printf("  ");//espacement des cases
-            sautageligne++;
-            if(sautageligne == 10) //saute une ligne si la variable = 5
-            {
-                printf("  %d",graduationchiffre);
-                graduationchiffre++;
-                printf("\n");
-                sautageligne = 0;
-            }
-        }
-    }
-} //Affiche la carte
-
-int TraducteurGrille(char Lettrechoix){
-    int Rendu = 0; //valeur rendue
-    //CETTE FONCTION "TRADUIT" LA LETTRE ENTREE PAR LE JOUEUR EN CHIFFRE QUI PERMET AU PROGRAMME DE L'UTILISER POUR LE TABLEAU
-    if(Lettrechoix == 'A' || Lettrechoix == 'a')
-    {
-        Rendu = 0;
-    }
-    if(Lettrechoix == 'B' || Lettrechoix == 'b')
-    {
-        Rendu = 1;
-    }
-    if(Lettrechoix == 'C' || Lettrechoix == 'c')
-    {
-        Rendu = 2;
-    }
-    if(Lettrechoix == 'D' || Lettrechoix == 'd')
-    {
-        Rendu = 3;
-    }
-    if(Lettrechoix == 'E' || Lettrechoix == 'e')
-    {
-        Rendu = 4;
-    }
-    if(Lettrechoix == 'F' || Lettrechoix == 'f')
-    {
-        Rendu = 5;
-    }
-    if(Lettrechoix == 'G' || Lettrechoix == 'g')
-    {
-        Rendu = 6;
-    }
-    if(Lettrechoix == 'H' || Lettrechoix == 'h')
-    {
-        Rendu = 7;
-    }
-    if(Lettrechoix == 'I' || Lettrechoix == 'i')
-    {
-        Rendu = 8;
-    }
-    if(Lettrechoix == 'J' || Lettrechoix == 'j') {
-        Rendu = 9;
-    }
-    return Rendu;
-}
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//TODO : UTILISER DES CONSTANTES POUR LES BATEAUX ET AUTRES !
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 int main() {
+    SetConsoleOutputCP(65001);
     //---VARIABLES---
     char NomJoueur[255] ="NULL"; //Nom du joueur
     char ChoixLettreHORIZONTAL;
@@ -173,7 +88,7 @@ int main() {
 
         case 1: //JOUER AVEC LA CARTE DE BASE
             system("cls");
-            //Sors du switch et commence le jeu plus bas
+            //Sort du switch et commence le jeu plus bas
             break;
 
         case 2: //JOUER AVEC UNE CARTE STOCKEE DANS UN FICHIER
@@ -204,7 +119,7 @@ int main() {
     }
 
 
-    //------------------------------BOUCLE DU JEU---------------------------------------
+    //!------------------------------BOUCLE DU JEU---------------------------------------
     while(jeu_en_cours == true)
     {
         afficherCarte(TableauAffiche,NbTirs,NbBateaux,NomJoueur); // Affiche la carte a chaque début de boucle
@@ -225,13 +140,13 @@ int main() {
 
         if(TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] == 1) // Si le joueur touche une case du bateau 1
         {
-            printf("\n\nTouche !\n");
+            printf("\n\nTouché !\n");
             TableauAffiche[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = *"X"; //change la case touchée par le joueur. @ pour rien touché , X pour bateau touché
             TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = 4;
             HpBateau1--;
             if(HpBateau1 == 0)
             {
-                printf("Le bateau numero 1 a coule !\n");
+                printf("Le bateau numero 1 a coulé !\n");
                 NbBateaux--;
             }
             NbTirs++;
@@ -240,7 +155,7 @@ int main() {
         }
         else if(TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] == 0) //Si le joueur tire sur une case vide
         {
-            printf("\n\nRate !\n");
+            printf("\n\nRaté !\n");
             TableauAffiche[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = *"@";
             TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = 4;
             NbTirs++;
@@ -249,13 +164,13 @@ int main() {
         }
         else if(TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] == 2) //Si le joueur tire sur une case du bateau 2
         {
-            printf("\n\nTouche !\n");
+            printf("\n\nTouché !\n");
             TableauAffiche[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = *"X";
             TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = 4;
             HpBateau2--;
             if(HpBateau2 == 0)
             {
-                printf("Le bateau numero 2 a coule !\n");
+                printf("Le bateau numero 2 a coulé !\n");
                 NbBateaux--;
             }
             NbTirs++;
@@ -264,13 +179,13 @@ int main() {
         }
         else if(TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] == 3) //Si le joueur tire sur une case du bateau 2
         {
-            printf("\n\nTouche !\n");
+            printf("\n\nTouché !\n");
             TableauAffiche[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = *"X";
             TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = 4;
             HpBateau3--;
             if(HpBateau3 == 0)
             {
-                printf("Le bateau numero 3 a coule !\n");
+                printf("Le bateau numero 3 a coulé !\n");
                 NbBateaux--;
             }
             NbTirs++;
@@ -279,7 +194,7 @@ int main() {
         }
         else if(TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] == 4) //Si le joueur a deja tiré sur cette case
         {
-            printf("Vous avez deja tire ici !\n");
+            printf("Vous avez deja tiré ici !\n");
             system("pause");
             system("cls");
         }
@@ -293,7 +208,7 @@ int main() {
         }
     }
 
-    printf("Felicitations ! Vous avez gagne en %d tirs !\n\n",NbTirs); //Message de fin du jeu
+    printf("Félicitations ! Vous avez gagné en %d tirs !\n\n",NbTirs); //Message de fin du jeu
     system("pause");
     return 0;
 }
