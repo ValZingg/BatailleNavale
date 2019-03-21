@@ -14,7 +14,7 @@
  * Titre : Bataille Navale
  * Description : Un jeu ou il faut trouver et couler des bateaux sur une grille.
  * Date de création : 21 février 2019
- * Dernière mise à jour : 20 mars 2019
+ * Dernière mise à jour : 21 mars 2019
  */
 
 #define MAX_HEALTH_SHIP_NUMBER_1 1; //vie maximum du bateau 1
@@ -66,6 +66,7 @@ int main() {
     //---VARIABLES---
 
 
+
     //Input du nom du joueur
     printf("Entrez votre nom :");
     scanf("%s",NomJoueur);
@@ -74,11 +75,21 @@ int main() {
     system("cls");
 
     //Affichage du menu principal
-    printf("----------BATAILLE NAVALE----------\n\n");
+    printf("\t     |    |    |\n");
+    printf("\t    )_)  )_)  )_)\n");
+    printf("\t   )___))___))___)\\\n");
+    printf("\t  )____)____)_____)\\\\\n");
+    printf("\t  ____|____|____|____\\\\\\___\n");
+    printf("~~~~~~~~~~\\    BATAILLE NAVALE    /~~~~~~~~~~\n");
+    printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n");
+    printf("---------------------------------------------\n");
     printf("1.Jouer\n");
     printf("2.Jouer avec une carte personalisee\n");
     printf("3.Aide\n");
     printf("4.Quitter\n");
+    printf("---------------------------------------------\n");
+    printf("\nBateau ASCII par Christopher Johnson\n");
+    printf("https://asciiart.website/index.php?art=transportation/nautical\n");
     scanf("%d",&ChoixMenu);
 
     switch(ChoixMenu)
@@ -95,7 +106,7 @@ int main() {
         case 2: //JOUER AVEC UNE CARTE STOCKEE DANS UN FICHIER
             system("cls");
             int chiffre = 0; // variable utilisée pour assigner les cases de la grille
-            int aleatoire = rand() % 3; //envoyé à une fonction qui choisira un fichier aléatoirement
+            int aleatoire = rand() % 3; //envoyé à une fonction qui choisira un fichier aléatoirement TODO : FAIRE UN VRAI RANDOM
             const char * fichierandom;//variable qui contient le nom du fichier à lire
             fichierandom = choixficher(aleatoire);
             FILE * fichier; //variable du fichier
@@ -111,6 +122,7 @@ int main() {
                     TableauNaval[j][i] = chiffre; //Assigne la valeur stockée à la case de la grille actuelle
                 }
             }
+            fclose(fichier);
             break;
 
         case 3:
