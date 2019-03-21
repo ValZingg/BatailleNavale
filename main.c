@@ -4,8 +4,8 @@
 #include <strings.h>
 #include <stdbool.h>
 #include <windows.h>
-#include "fonctionsjeu.h"
-#include "aidejeu.h"
+#include "fonctionsjeu.h" //Contient la fonction pour afficher la carte et la fonction pour Convertir les inputs CHAR de l'utilisateur en INT
+#include "aidejeu.h" //Contient la fonction pour afficher l'aide du jeu
 
 #pragma execution_character_set ("utf-8")
 
@@ -17,9 +17,10 @@
  * Dernière mise à jour : 20 mars 2019
  */
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//TODO : UTILISER DES CONSTANTES POUR LES BATEAUX ET AUTRES !
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#define MAX_HEALTH_SHIP_NUMBER_1 1; //vie maximum du bateau 1
+#define MAX_HEALTH_SHIP_NUMBER_2 2; //vie maximum du bateau 2
+#define MAX_HEALTH_SHIP_NUMBER_3 3; //vie maximum du bateau 3
+
 
 int main() {
     SetConsoleOutputCP(65001);
@@ -31,9 +32,9 @@ int main() {
     int ChoixTirHORIZONTAL;
     int NbTirs = 0; // nombre de tirs effectués par le joueur
     int NbBateaux = 3; // Nombre de bateau à la surface
-    int HpBateau1 = 1; // Points de vie du bateau 1
-    int HpBateau2 = 2; // Points de vie du bateau 2
-    int HpBateau3 = 3; // Points de vie du bateau 3
+    int HpBateau1 = MAX_HEALTH_SHIP_NUMBER_1; // Points de vie du bateau 1
+    int HpBateau2 = MAX_HEALTH_SHIP_NUMBER_2; // Points de vie du bateau 2
+    int HpBateau3 = MAX_HEALTH_SHIP_NUMBER_3; // Points de vie du bateau 3
     int i = 0;//utilisé pour les boucles for
     int j = 0;//utilisé pour les boucles for
     bool jeu_en_cours = true;
@@ -94,8 +95,12 @@ int main() {
         case 2: //JOUER AVEC UNE CARTE STOCKEE DANS UN FICHIER
             system("cls");
             int chiffre = 0; // variable utilisée pour assigner les cases de la grille
+            int aleatoire = rand() % 3; //envoyé à une fonction qui choisira un fichier aléatoirement
+            const char * fichierandom;//variable qui contient le nom du fichier à lire
+            fichierandom = choixficher(aleatoire);
             FILE * fichier; //variable du fichier
-            fichier = fopen("CartesCustom/CarteCustom1.BATAILLENAVALE", "r"); //ouvre le fichier de la grille
+            fichier = fopen(fichierandom, "r"); //ouvre le fichier de la grille
+            //TODO REMOVE CA PLUS TARD ! printf("%s",fichierandom);
             if(fichier == NULL)printf("Erreur ! Fichier introuvable.\n"); // Erreur si le fichier n'est pas trouvé
 
             for(j = 0;j < 10;j++) //boucle pour lire les valeurs du fichier grille et les assigner au tableau du jeu

@@ -84,4 +84,25 @@ int TraducteurGrille(char Lettrechoix){
     return Rendu; //renvoie le choix de lettre sous forme de integer
 }
 
+const char* choixficher(int chiffre){
+    const char * randomfichier ="null";
+
+    if(chiffre == 0)
+    {
+        randomfichier = "CartesCustom/CarteCustom1.BATAILLENAVALE";
+    }
+
+    if(chiffre == 1)
+    {
+        randomfichier = "CartesCustom/CarteCustom2.BATAILLENAVALE";
+    }
+
+    if(chiffre == 2)
+    {
+        randomfichier = "CartesCustom/CarteCustom3.BATAILLENAVALE";
+    }
+
+    return randomfichier;
+}
+
 #endif //UNEBATAILLEDANSLEAU_FONCTIONSJEU_H
