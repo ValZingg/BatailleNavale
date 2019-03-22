@@ -6,9 +6,26 @@
 #define UNEBATAILLEDANSLEAU_FONCTIONSJEU_H
 #include <stdio.h>
 #include <stdlib.h>
+#include <windows.h>
+#include "aidejeu.h"
+
+#define STLC 218 // ┌
+#define STRC 191 // ┐
+#define SBLC 192 // └
+#define SBRC 217 // ┘
+#define SVSB 179 // │
+#define SVRB 180 // ┤
+#define SVLB 195 // ├
+#define SHSB 196 // ─
+#define SHBB 193 // ┴
+#define SHTB 194 // ┬
+#define SC   197 // ┼
 
 void afficherCarte(char tableau[10][10],int tirs,int bateaux,char nomjoueur[255]) {
+    SetConsoleOutputCP(437); //permet l'affichage des graphismes NVIDIA ASCII 2020
     int affichercolonne = 0; //variables utilisées dans le for plus bas
+    int i = 0;//utlisé pour la boucle for
+    int JointHaut = 0;
     int afficherligne = 0;  // Pareil que la ligne du dessus
     int sautageligne = 0; //Variable qui au bout de 5 saute une ligne , permet de bien aligner les cases
     int graduationchiffre = 1;//variable pour la graduation verticale
@@ -17,26 +34,90 @@ void afficherCarte(char tableau[10][10],int tirs,int bateaux,char nomjoueur[255]
     printf("|++++++++++++++++ TIRS : %d ++++++++++++++|\n",tirs); //affiche le nombre de tirs
     printf("|++++++++++ BATEAUX RESTANTS : %d ++++++++|\n",bateaux); //affiche le nombre de bateaux restants
     printf("------------------------------------------\n");
-    printf("A  B  C  D  E  F  G  H  I  J\n"); //Graduation horizontale
+    printf("  A   B   C   D   E   F   G   H   I   J\n"); //Graduation horizontale
 
+    //! La boucle qui va suivre n'est pas élégante , mais elle fonctionne. Je m'excuse d'avance pour tout les mals de tête causés!
     for(afficherligne = 0; afficherligne < 10; afficherligne++)  //BOUCLE POUR AFFICHER LA CARTE
     {
+        if(afficherligne == 0)
+        {
+            printf("%c",STLC); // affiche le coin en haut a gauche
+        }
         for(affichercolonne = 0; affichercolonne < 10; affichercolonne++)
         {
-
-            printf("%c",tableau[afficherligne][affichercolonne]);
-            printf("  ");//espacement des cases
-            sautageligne++;
-            if(sautageligne == 10) //saute une ligne si la variable = 5
+            if(affichercolonne == 0) // au début de la ligne
             {
-                printf("  %d",graduationchiffre);
-                graduationchiffre++;
+                if(afficherligne == 0) // si le programme est a la première ligne
+                {
+                    //Ne rien afficher pour laisser la place au coin
+                }
+                else
+                {
+                    printf("%c",SVLB); // afficher "├"
+                }
+
+                for(i = 0;i < 40;i++) //boucle pour afficher l'ASCII des lignes horizontales
+                {
+                    if(i == 39) // si c'est le dernier charactère de la ligne
+                    {
+                        if(afficherligne == 0)
+                        {
+                            printf("%c",STRC); // si la boucle est à la première ligne , affiche un coin
+                        }
+                        else
+                        {
+                            printf("%c",SVRB); //sinon affiche le charactere "┤"
+                        }
+                    }
+                    else // sinon , continuer la ligne normalement
+                    {
+                        if(JointHaut == 3) //Toute les 3 charactères , afficher le charactère SC
+                        {
+                            printf("%c",SC);
+                            JointHaut = 0; //Remettre à 0 pour reconter les charactères
+                        }
+                        else//Sinon afficher Le charactère SHSB
+                        {
+                            printf("%c",SHSB);
+                            JointHaut++;
+                        }
+                    }
+                }
+
+                printf("\n%c",SVSB);
+            }
+            printf(" %c ",tableau[afficherligne][affichercolonne]);
+            sautageligne++; //traque le nombre de cases affichées sur la ligne
+            if(sautageligne != 10)printf("%c",SC);//affiche le charactere SC si il n'y a pas besoin de sauter la ligne
+            if(sautageligne == 10) //saute une ligne si la variable = 10
+            {
+                printf("%c",SVSB);
+                JointHaut = 0; // permet d'éviter les bugs graphiques
+                printf("  %d",graduationchiffre);//affiche la graduation de côté
+                graduationchiffre++;//augemente le chiffre de la graduation pour la prochaine utilisation de cette condition
                 printf("\n");
                 sautageligne = 0;
             }
         }
     }
 
+    printf("%c",SBLC);//Affiche le coin inférieur gauche
+    for(i = 0;i < 39;i++) //Cette boucle entière sert à afficher la ligne tout en bas de la grille
+    {
+        if(JointHaut == 3) //Toute les 3 charactères , afficher le charactère SC
+        {
+            printf("%c",SC);
+            JointHaut = 0; //Remettre à 0 pour reconter les charactères
+        }
+        else//Sinon afficher Le charactère SHSB
+        {
+            printf("%c",SHSB);
+            JointHaut++;
+        }
+    }
+    printf("%c\n",SBRC);//Affiche le coin inférieur droit
+
+    SetConsoleOutputCP(65001); //rétablit les accents
 } //Affiche la carte
 
 int TraducteurGrille(char Lettrechoix){
@@ -103,6 +184,72 @@ const char* choixficher(int chiffre){
     }
 
     return randomfichier;
+}
+
+void AfficherMenu(int TableauInt[10][10]){
+    int i = 0;//utilisé pour les boucles for
+    int j = 0;//utilisé pour les boucles for
+    //Affichage du menu principal
+    printf("\t     |    |    |\n");
+    printf("\t    )_)  )_)  )_)\n");
+    printf("\t   )___))___))___)\\\n");
+    printf("\t  )____)____)_____)\\\\\n");
+    printf("\t  ____|____|____|____\\\\\\___\n");
+    printf("~~~~~~~~~~\\    BATAILLE NAVALE    /~~~~~~~~~~\n");
+    printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n");
+    printf("---------------------------------------------\n");
+    printf("1.Jouer\n");
+    printf("2.Jouer avec une carte personalisee\n");
+    printf("3.Aide\n");
+    printf("4.Quitter\n");
+    printf("---------------------------------------------\n");
+    printf("\nBateau ASCII par Christopher Johnson\n");
+    printf("https://asciiart.website/index.php?art=transportation/nautical\n");
+
+    int ChoixMenu = 0;
+    scanf("%d",&ChoixMenu);
+
+    switch(ChoixMenu)
+    {
+        default:
+            //rien ici
+            break;
+
+        case 1: //JOUER AVEC LA CARTE DE BASE
+            system("cls");
+            //Sort du switch et commence le jeu plus bas
+            break;
+
+        case 2: //JOUER AVEC UNE CARTE STOCKEE DANS UN FICHIER
+            system("cls");
+            int chiffre = 0; // variable utilisée pour assigner les cases de la grille
+            int aleatoire = rand() % 3; //envoyé à une fonction qui choisira un fichier aléatoirement TODO : FAIRE UN VRAI RANDOM
+            const char * fichierandom;//variable qui contient le nom du fichier à lire
+            fichierandom = choixficher(aleatoire);
+            FILE * fichier; //variable du fichier
+            fichier = fopen(fichierandom, "r"); //ouvre le fichier de la grille
+            if(fichier == NULL)printf("Erreur ! Fichier introuvable.\n"); // Erreur si le fichier n'est pas trouvé
+
+            for(j = 0;j < 10;j++) //boucle pour lire les valeurs du fichier grille et les assigner au tableau du jeu
+            {
+                for(i = 0; i < 10; i++)
+                {
+                    fscanf(fichier,"%d",&chiffre); //Scanne et stock la valeur de la ligne actuelle en int
+                    TableauInt[j][i] = chiffre; //Assigne la valeur stockée à la case de la grille actuelle
+                }
+            }
+            fclose(fichier);
+            break;
+
+        case 3:
+            // AIDE
+            menuaide(); // Affiche l'aide avec une fonction
+            break;
+
+        case 4://QUITTER
+            exit(0); //Termine le programme
+
+    }
 }
 
 #endif //UNEBATAILLEDANSLEAU_FONCTIONSJEU_H

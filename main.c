@@ -14,20 +14,30 @@
  * Titre : Bataille Navale
  * Description : Un jeu ou il faut trouver et couler des bateaux sur une grille.
  * Date de création : 21 février 2019
- * Dernière mise à jour : 21 mars 2019
+ * Dernière mise à jour : 22 mars 2019
  */
 
 #define MAX_HEALTH_SHIP_NUMBER_1 1; //vie maximum du bateau 1
 #define MAX_HEALTH_SHIP_NUMBER_2 2; //vie maximum du bateau 2
 #define MAX_HEALTH_SHIP_NUMBER_3 3; //vie maximum du bateau 3
 
+#define STLC 218 // ┌
+#define STRC 191 // ┐
+#define SBLC 192 // └
+#define SBRC 217 // ┘
+#define SVSB 179 // │
+#define SVRB 180 // ┤
+#define SVLB 195 // ├
+#define SHSB 196 // ─
+#define SHBB 193 // ┴
+#define SHTB 194 // ┬
+#define SC   197 // ┼
 
 int main() {
     SetConsoleOutputCP(65001);
     //---VARIABLES---
     char NomJoueur[255] ="NULL"; //Nom du joueur
     char ChoixLettreHORIZONTAL;
-    int ChoixMenu = 0;
     int ChoixTirVERTICAL;
     int ChoixTirHORIZONTAL;
     int NbTirs = 0; // nombre de tirs effectués par le joueur
@@ -35,8 +45,6 @@ int main() {
     int HpBateau1 = MAX_HEALTH_SHIP_NUMBER_1; // Points de vie du bateau 1
     int HpBateau2 = MAX_HEALTH_SHIP_NUMBER_2; // Points de vie du bateau 2
     int HpBateau3 = MAX_HEALTH_SHIP_NUMBER_3; // Points de vie du bateau 3
-    int i = 0;//utilisé pour les boucles for
-    int j = 0;//utilisé pour les boucles for
     bool jeu_en_cours = true;
 
     int TableauNaval[10][10]={ //cette carte est invisible au joueur
@@ -66,6 +74,7 @@ int main() {
     //---VARIABLES---
 
 
+    //!-----------------------------DEBUT DU PROGRAMME-----------------------------------
 
     //Input du nom du joueur
     printf("Entrez votre nom :");
@@ -74,66 +83,7 @@ int main() {
     system("pause");
     system("cls");
 
-    //Affichage du menu principal
-    printf("\t     |    |    |\n");
-    printf("\t    )_)  )_)  )_)\n");
-    printf("\t   )___))___))___)\\\n");
-    printf("\t  )____)____)_____)\\\\\n");
-    printf("\t  ____|____|____|____\\\\\\___\n");
-    printf("~~~~~~~~~~\\    BATAILLE NAVALE    /~~~~~~~~~~\n");
-    printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n");
-    printf("---------------------------------------------\n");
-    printf("1.Jouer\n");
-    printf("2.Jouer avec une carte personalisee\n");
-    printf("3.Aide\n");
-    printf("4.Quitter\n");
-    printf("---------------------------------------------\n");
-    printf("\nBateau ASCII par Christopher Johnson\n");
-    printf("https://asciiart.website/index.php?art=transportation/nautical\n");
-    scanf("%d",&ChoixMenu);
-
-    switch(ChoixMenu)
-    {
-        default:
-            //rien ici
-            break;
-
-        case 1: //JOUER AVEC LA CARTE DE BASE
-            system("cls");
-            //Sort du switch et commence le jeu plus bas
-            break;
-
-        case 2: //JOUER AVEC UNE CARTE STOCKEE DANS UN FICHIER
-            system("cls");
-            int chiffre = 0; // variable utilisée pour assigner les cases de la grille
-            int aleatoire = rand() % 3; //envoyé à une fonction qui choisira un fichier aléatoirement TODO : FAIRE UN VRAI RANDOM
-            const char * fichierandom;//variable qui contient le nom du fichier à lire
-            fichierandom = choixficher(aleatoire);
-            FILE * fichier; //variable du fichier
-            fichier = fopen(fichierandom, "r"); //ouvre le fichier de la grille
-            //TODO REMOVE CA PLUS TARD ! printf("%s",fichierandom);
-            if(fichier == NULL)printf("Erreur ! Fichier introuvable.\n"); // Erreur si le fichier n'est pas trouvé
-
-            for(j = 0;j < 10;j++) //boucle pour lire les valeurs du fichier grille et les assigner au tableau du jeu
-            {
-                for(i = 0; i < 10; i++)
-                {
-                    fscanf(fichier,"%d",&chiffre); //Scanne et stock la valeur de la ligne actuelle en int
-                    TableauNaval[j][i] = chiffre; //Assigne la valeur stockée à la case de la grille actuelle
-                }
-            }
-            fclose(fichier);
-            break;
-
-        case 3:
-            // AIDE
-            menuaide(); // Affiche l'aide avec une fonction
-            break;
-
-        case 4://QUITTER
-            return 99; //Termine le programme
-
-    }
+    AfficherMenu(TableauNaval); // Affiche le menu
 
 
     //!------------------------------BOUCLE DU JEU---------------------------------------
@@ -226,6 +176,11 @@ int main() {
     }
 
     printf("Félicitations ! Vous avez gagné en %d tirs !\n\n",NbTirs); //Message de fin du jeu
+    printf("Voulez-vous enregistrer votre score ?\n");
+    printf("1.Oui\n");
+    printf("2.Non\n\n");
+    printf("-> ");
+    //TODO : SAUVEGARDE DE SCORE
     system("pause");
     return 0;
 }
