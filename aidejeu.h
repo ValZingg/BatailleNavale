@@ -13,10 +13,11 @@ void menuaide() {
     printf("Tout d'abord il faut choisir où tirer.\n");
     printf("Vous allez choisir la case en tapant un chiffre de 1-10 et une lettre de A-J\n");
     printf("Vous choisirez d'abord l'axe horizontal puis vertical.\n\n");
-    printf("Il y a toujours 3 Bateaux:\n");
-    printf("Le bateau 1 qui fait 1 CASE\n");
-    printf("Le bateau 2 qui fait 2 CASE\n");
-    printf("Le bateau 3 qui fait 3 CASE\n");
+    printf("Il y a toujours 4 Bateaux:\n");
+    printf("La Corvette qui fait 1 CASE\n");
+    printf("La Frégate qui fait 2 CASES\n");
+    printf("Le Destroyer qui fait 3 CASES\n");
+    printf("Le Cuirassé qui fait 4 CASES\n");
     printf("<!!!>IL NE PEUT PAS Y AVOIR DE BATEAUX EN DIAGONALE<!!!>\n");
     printf("\n");
     printf("---Types de cases---\n");
