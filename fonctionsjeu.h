@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
+#include <stdbool.h>
 #include "aidejeu.h"
 
 #define STLC 218 // ┌
@@ -186,7 +187,84 @@ const char* choixficher(int chiffre){
     return randomfichier;
 }
 
+void EnregistrerScore(int ScoreFinal){
+    int TableauScores[11]; // Tableau des scores , va être copié dans le fichier score
+    int nbmax = 11; //taille maximum du tableau
+    int temp = 0;
+    int i;
+    int j;
+    int chiffre;
+    FILE * Fichier;
+
+    Fichier = fopen("Scores.BATAILLENAVALE", "r");
+    if(Fichier == NULL)printf("Erreur ! Fichier introuvable.\n");
+    for(i = 0; i < 10; i++) //Récupère toutes les valeurs dans le fichier score et le met dans le tabeau "TableauScores[10]"
+    {
+        fscanf(Fichier,"%d",&chiffre);
+        TableauScores[i] = chiffre;
+    }
+    fclose(Fichier);
+
+    if(TableauScores[10] >= ScoreFinal) //Si le score entré est meilleur que le PIRE score , il est entré dans le tableau
+    {
+        TableauScores[10] = ScoreFinal;
+    }
+
+    for(j = 0;j != nbmax;j++) //Cette boucle met les valeurs du tableau dans l'ordre croissant (plus le score est petit mieux c'est)
+    {
+        for(i = 0;i != nbmax;i++)
+        {
+            if(TableauScores[i] > TableauScores[i+1])
+            {
+                temp = TableauScores[i];
+                TableauScores[i] = TableauScores[i+1];
+                TableauScores[i+1] = temp;
+            }
+        }
+    }
+
+    Fichier = fopen("Scores.BATAILLENAVALE", "w+"); //réouvre le fichier pour mettre les nouveaux scores
+    for(i = 9;i > -1;i--) //Cette boucle insère les nouveaux score dans le fichier score et retire le pire score (le 11ème)
+    {
+        fprintf(Fichier,"%d\n",TableauScores[i]);
+    }
+    fclose(Fichier);
+
+}
+
+void ScoresAffiche(){ //Fonction presque identique à EnregistrerScore() , Celle-ci sert uniquement a afficher les scores
+    system("cls");
+    int TableauScores[11]; // Tableau des scores , va être copié dans le fichier score
+    int i;
+    int chiffre;
+    FILE * Fichier;
+
+    printf("Voici les meilleurs scores !\n");
+    printf("(En nombre de coups)\n\n");
+
+    Fichier = fopen("Scores.BATAILLENAVALE", "r");
+    if(Fichier == NULL)printf("Erreur ! Fichier introuvable.\n");
+    for(i = 0; i < 10; i++) //Récupère toutes les valeurs dans le fichier score et le met dans le tabeau "TableauScores[10]"
+    {
+        fscanf(Fichier,"%d",&chiffre);
+        TableauScores[i] = chiffre;
+    }
+    fclose(Fichier);
+
+    int compteurplace = 1; //compteur de place dans le classement
+    for(i = 9;i != -1;i--)
+    {
+        printf("%d #%d\n",TableauScores[i],compteurplace); //print le tableau entier
+        compteurplace++;
+    }
+    printf("\n\n");
+
+    system("pause");
+    system("cls");
+}
+
 void AfficherMenu(int TableauInt[10][10]){
+    system("cls"); //nettoie l'écran
     int i = 0;//utilisé pour les boucles for
     int j = 0;//utilisé pour les boucles for
     //Affichage du menu principal
@@ -201,13 +279,20 @@ void AfficherMenu(int TableauInt[10][10]){
     printf("1.Jouer\n");
     printf("2.Jouer avec une carte personalisee\n");
     printf("3.Aide\n");
-    printf("4.Quitter\n");
+    printf("4.Scores\n");
+    printf("5.Quitter\n");
     printf("---------------------------------------------\n");
     printf("\nBateau ASCII par Christopher Johnson\n");
     printf("https://asciiart.website/index.php?art=transportation/nautical\n");
 
     int ChoixMenu = 0;
     scanf("%d",&ChoixMenu);
+    if(ChoixMenu > 5 || ChoixMenu < 1)
+    {
+        printf("Aie aie aie ! Valeur non correcte !\n");
+        system("pause");
+        AfficherMenu(TableauInt);
+    }
 
     switch(ChoixMenu)
     {
@@ -217,7 +302,7 @@ void AfficherMenu(int TableauInt[10][10]){
 
         case 1: //JOUER AVEC LA CARTE DE BASE
             system("cls");
-            //Sort du switch et commence le jeu plus bas
+            //Sort du switch et commence le dans le main.c
             break;
 
         case 2: //JOUER AVEC UNE CARTE STOCKEE DANS UN FICHIER
@@ -244,12 +329,20 @@ void AfficherMenu(int TableauInt[10][10]){
         case 3:
             // AIDE
             menuaide(); // Affiche l'aide avec une fonction
+            AfficherMenu(TableauInt); //retourne au menu
             break;
 
-        case 4://QUITTER
+        case 4://SCORE
+            ScoresAffiche();
+            AfficherMenu(TableauInt); //retourne au menu
+            break;
+
+        case 5://QUITTER
             exit(0); //Termine le programme
 
     }
 }
+
+
 
 #endif //UNEBATAILLEDANSLEAU_FONCTIONSJEU_H

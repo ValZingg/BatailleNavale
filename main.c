@@ -14,12 +14,13 @@
  * Titre : Bataille Navale
  * Description : Un jeu ou il faut trouver et couler des bateaux sur une grille.
  * Date de création : 21 février 2019
- * Dernière mise à jour : 22 mars 2019
+ * Dernière mise à jour : 28 mars 2019
  */
 
 #define MAX_HEALTH_SHIP_NUMBER_1 1; //vie maximum du bateau 1
 #define MAX_HEALTH_SHIP_NUMBER_2 2; //vie maximum du bateau 2
 #define MAX_HEALTH_SHIP_NUMBER_3 3; //vie maximum du bateau 3
+#define MAX_HEALTH_SHIP_NUMBER_4 4; //vie maximum du bateau 4
 
 #define STLC 218 // ┌
 #define STRC 191 // ┐
@@ -38,23 +39,25 @@ int main() {
     //---VARIABLES---
     char NomJoueur[255] ="NULL"; //Nom du joueur
     char ChoixLettreHORIZONTAL;
+    int ChoixScore; //variable du switch pour savoir si le joueur veux enregistrer son score
     int ChoixTirVERTICAL;
     int ChoixTirHORIZONTAL;
     int NbTirs = 0; // nombre de tirs effectués par le joueur
-    int NbBateaux = 3; // Nombre de bateau à la surface
+    int NbBateaux = 4; // Nombre de bateau à la surface
     int HpBateau1 = MAX_HEALTH_SHIP_NUMBER_1; // Points de vie du bateau 1
     int HpBateau2 = MAX_HEALTH_SHIP_NUMBER_2; // Points de vie du bateau 2
     int HpBateau3 = MAX_HEALTH_SHIP_NUMBER_3; // Points de vie du bateau 3
+    int HpBateau4 = MAX_HEALTH_SHIP_NUMBER_4; // Points de vie du bateau 4
     bool jeu_en_cours = true;
 
     int TableauNaval[10][10]={ //cette carte est invisible au joueur
            0,0,0,0,1,0,0,0,0,0,   // 0 = Rien
            0,2,2,0,0,0,0,0,0,0,   // 1 = Bateau 1
            0,0,0,0,0,0,0,0,0,0,   // 2 = Bateau 2
-           0,3,3,3,0,0,0,0,0,0,   // 3 = Bateau 3
-           0,0,0,0,0,0,0,0,0,0,   // 4 = Deja tiré ici
-           0,0,0,0,0,0,0,0,0,0,
-           0,0,0,0,0,0,0,0,0,0,
+           0,3,3,3,0,0,4,0,0,0,   // 3 = Bateau 3
+           0,0,0,0,0,0,4,0,0,0,   // 4 = Bateau 4
+           0,0,0,0,0,0,4,0,0,0,   // 5 = Deja tiré ici
+           0,0,0,0,0,0,4,0,0,0,
            0,0,0,0,0,0,0,0,0,0,
            0,0,0,0,0,0,0,0,0,0,
            0,0,0,0,0,0,0,0,0,0,
@@ -78,8 +81,8 @@ int main() {
 
     //Input du nom du joueur
     printf("Entrez votre nom :");
-    scanf("%s",NomJoueur);
-    printf("\nBonjour , %s !\n",NomJoueur);
+    gets(NomJoueur); //! gets > scanf
+    printf("Bonjour , %s !\n",NomJoueur);
     system("pause");
     system("cls");
 
@@ -109,7 +112,7 @@ int main() {
         {
             printf("\n\nTouché !\n");
             TableauAffiche[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = *"X"; //change la case touchée par le joueur. @ pour rien touché , X pour bateau touché
-            TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = 4;
+            TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = 5;
             HpBateau1--;
             if(HpBateau1 == 0)
             {
@@ -124,7 +127,7 @@ int main() {
         {
             printf("\n\nRaté !\n");
             TableauAffiche[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = *"@";
-            TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = 4;
+            TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = 5;
             NbTirs++;
             system("pause");
             system("cls");
@@ -133,7 +136,7 @@ int main() {
         {
             printf("\n\nTouché !\n");
             TableauAffiche[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = *"X";
-            TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = 4;
+            TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = 5;
             HpBateau2--;
             if(HpBateau2 == 0)
             {
@@ -144,11 +147,11 @@ int main() {
             system("pause");
             system("cls");
         }
-        else if(TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] == 3) //Si le joueur tire sur une case du bateau 2
+        else if(TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] == 3) //Si le joueur tire sur une case du bateau 3
         {
             printf("\n\nTouché !\n");
             TableauAffiche[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = *"X";
-            TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = 4;
+            TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = 5;
             HpBateau3--;
             if(HpBateau3 == 0)
             {
@@ -159,7 +162,22 @@ int main() {
             system("pause");
             system("cls");
         }
-        else if(TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] == 4) //Si le joueur a deja tiré sur cette case
+        else if(TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] == 4) //Si le joueur tire sur une case du bateau 4
+        {
+            printf("\n\nTouché !\n");
+            TableauAffiche[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = *"X";
+            TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = 5;
+            HpBateau4--;
+            if(HpBateau4 == 0)
+            {
+                printf("Le bateau numero 4 a coulé !\n");
+                NbBateaux--;
+            }
+            NbTirs++;
+            system("pause");
+            system("cls");
+        }
+        else if(TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] == 5) //Si le joueur a deja tiré sur cette case
         {
             printf("Vous avez deja tiré ici !\n");
             system("pause");
@@ -180,7 +198,23 @@ int main() {
     printf("1.Oui\n");
     printf("2.Non\n\n");
     printf("-> ");
-    //TODO : SAUVEGARDE DE SCORE
+    scanf("%d",&ChoixScore);
+    switch(ChoixScore)
+    {
+        default:
+            printf("erreur !");
+            exit(1);
+
+        case 1:
+            EnregistrerScore(NbTirs); //appelle la fonction pour enregistrer le score
+            printf("Score enregistré !\n");
+            AfficherMenu(TableauNaval); // retourne au menu
+            break;
+
+        case 2:
+            AfficherMenu(TableauNaval); //retourne au menu
+            break;
+    }
     system("pause");
     return 0;
 }
