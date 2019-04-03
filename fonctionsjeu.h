@@ -276,8 +276,8 @@ void AfficherMenu(int TableauInt[10][10]){
     printf("~~~~~~~~~~\\    BATAILLE NAVALE    /~~~~~~~~~~\n");
     printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n");
     printf("---------------------------------------------\n");
-    printf("1.Jouer\n");
-    printf("2.Jouer avec une carte personalisee\n");
+    printf("1.Jouer avec la grille de base\n");
+    printf("2.Jouer avec une grille aléatoire\n");
     printf("3.Aide\n");
     printf("4.Scores\n");
     printf("5.Quitter\n");
