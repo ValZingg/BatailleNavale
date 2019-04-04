@@ -22,7 +22,7 @@ void menuaide() {
     printf("\n");
     printf("---Types de cases---\n");
     printf("~ = Eau (case ou vous n'avez pas encore tiré)\n");
-    printf("X = Bateau touche (case ou vous avez tiré et touché)\n");
+    printf("X = Bateau touché (case ou vous avez tiré et touché)\n");
     printf("@ = Ratage (case ou vous avez tiré mais rien n'a ete touché.)\n\n");
     system("pause");
     system("cls");

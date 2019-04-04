@@ -9,6 +9,7 @@
 #include <windows.h>
 #include <stdbool.h>
 #include "aidejeu.h"
+#include <time.h>
 
 #define STLC 218 // ┌
 #define STRC 191 // ┐
@@ -342,6 +343,7 @@ void AfficherMenu(int TableauInt[10][10]){
 
     }
 }
+
 
 
 

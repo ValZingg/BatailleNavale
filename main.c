@@ -106,82 +106,90 @@ int main() {
         scanf("%d",&ChoixTirVERTICAL);
         ChoixTirVERTICAL--; //Soustrait la valeur de 1 car la grille commence la graduation à 1 alors que le tableau à 0
 
-        //TODO : REMPLACER LES "IF ELSE" PAR UN TRUC PLUS PRATIQUE !
+        int ResultatTir = TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL]; //met le resultat du tir dans une variable
 
-        if(TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] == 1) // Si le joueur touche une case de la corvette
+        switch(ResultatTir) //Contrôle ce que le joueur a ou n'a pas touché en tirant
         {
-            printf("\n\nTouché !\n");
-            TableauAffiche[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = *"X"; //change la case touchée par le joueur. @ pour rien touché , X pour bateau touché
-            TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = 5;
-            HpCorvette--;
-            if(HpCorvette == 0)
-            {
-                printf("La corvette a coulé !\n");
-                NbBateaux--;
-            }
-            NbTirs++;
-            system("pause");
-            system("cls");
-        }
-        else if(TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] == 0) //Si le joueur tire sur une case vide
-        {
-            printf("\n\nRaté !\n");
-            TableauAffiche[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = *"@";
-            TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = 5;
-            NbTirs++;
-            system("pause");
-            system("cls");
-        }
-        else if(TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] == 2) //Si le joueur tire sur une case de la frégate
-        {
-            printf("\n\nTouché !\n");
-            TableauAffiche[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = *"X";
-            TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = 5;
-            HpFregate--;
-            if(HpFregate == 0)
-            {
-                printf("La frégate a coulé !\n");
-                NbBateaux--;
-            }
-            NbTirs++;
-            system("pause");
-            system("cls");
-        }
-        else if(TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] == 3) //Si le joueur tire sur une case du Destroyer
-        {
-            printf("\n\nTouché !\n");
-            TableauAffiche[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = *"X";
-            TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = 5;
-            HpDestroyer--;
-            if(HpDestroyer == 0)
-            {
-                printf("Le Destroyer a coulé !\n");
-                NbBateaux--;
-            }
-            NbTirs++;
-            system("pause");
-            system("cls");
-        }
-        else if(TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] == 4) //Si le joueur tire sur une case du Cuirassé
-        {
-            printf("\n\nTouché !\n");
-            TableauAffiche[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = *"X";
-            TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = 5;
-            HpCuirasse--;
-            if(HpCuirasse == 0)
-            {
-                printf("Le Cuirassé a coulé !\n");
-                NbBateaux--;
-            }
-            NbTirs++;
-            system("pause");
-            system("cls");
-        }
-        else if(TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] == 5) //Si le joueur a deja tiré sur cette case
-        {
-            printf("Vous avez deja tiré ici !\n");
-            system("pause");
-            system("cls");
+            default:
+                printf("Erreur imprévue !\n");
+                system("pause");
+                exit(0);
+
+            case 0: //Si le joueur tire dans l'eau
+                printf("\n\nRaté !\n");
+                TableauAffiche[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = *"@";
+                TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = 5;
+                NbTirs++; // Le score augemente
+                system("pause");
+                system("cls");
+                break;
+
+            case 1://Si le joueur touche la corvette
+                printf("\n\nTouché !\n");
+                TableauAffiche[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = *"X"; //change la case touchée par le joueur. @ pour rien touché , X pour bateau touché
+                TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = 5; //définis cette case comme ayant déjà étée tirée dessus
+                HpCorvette--;
+                if(HpCorvette == 0) //Si le bateau n'a plus de points de vie (cases)
+                {
+                    printf("La corvette a coulé !\n");
+                    NbBateaux--; // Le nombre de bateaux baisse
+                }
+                NbTirs++;
+                system("pause");
+                system("cls");
+                break;
+
+            case 2://Si le joueur touche une case de la frégate
+                printf("\n\nTouché !\n");
+                TableauAffiche[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = *"X";
+                TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = 5;
+                HpFregate--;
+                if(HpFregate == 0)
+                {
+                    printf("La frégate a coulé !\n");
+                    NbBateaux--;
+                }
+                NbTirs++;
+                system("pause");
+                system("cls");
+                break;
+
+            case 3://Si le joueur touche une case du destroyer
+                printf("\n\nTouché !\n");
+                TableauAffiche[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = *"X";
+                TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = 5;
+                HpDestroyer--;
+                if(HpDestroyer == 0)
+                {
+                    printf("Le Destroyer a coulé !\n");
+                    NbBateaux--;
+                }
+                NbTirs++;
+                system("pause");
+                system("cls");
+                break;
+
+            case 4://Si le joueur touche une case du cuirassé
+                printf("\n\nTouché !\n");
+                TableauAffiche[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = *"X";
+                TableauNaval[ChoixTirVERTICAL][ChoixTirHORIZONTAL] = 5;
+                HpCuirasse--;
+                if(HpCuirasse == 0)
+                {
+                    printf("Le Cuirassé a coulé !\n");
+                    NbBateaux--;
+                }
+                NbTirs++;
+                system("pause");
+                system("cls");
+                break;
+
+            case 5:
+                printf("Vous avez deja tiré ici !\n");
+                system("pause");
+                system("cls");
+                break;
+
         }
 
 
