@@ -80,6 +80,7 @@ int main() {
     //!-----------------------------DEBUT DU PROGRAMME-----------------------------------
 
     //Input du nom du joueur
+    system("color 1f"); //Change la couleur de la console
     printf("Entrez votre nom :");
     gets(NomJoueur); //! gets > scanf
     printf("Bonjour , %s !\n",NomJoueur);
@@ -87,7 +88,6 @@ int main() {
     system("cls");
 
     AfficherMenu(TableauNaval); // Affiche le menu
-
 
     //!------------------------------BOUCLE DU JEU---------------------------------------
     while(jeu_en_cours == true)

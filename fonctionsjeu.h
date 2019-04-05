@@ -392,30 +392,11 @@ void GrilleRandom(int Tableau[10][10]){
     }
     system("cls");
     printf("Creation terminée.\n");
-    printf("fichier %s créé !\n",nomfichier);
+    printf("grille %s créé !\n",nomfichier);
+    printf("Démarrage du jeu...\n\n");
     system("pause");
     fclose(fichiergrille);//ferme le fichier.
     system("cls");
-    printf("Voulez vous jouer directement avec cette grille ?\n");
-    printf("1.Oui");
-    printf("2.Non");
-    int choix = 0; //choix du joueur
-    scanf("%d",&choix);
-    switch(choix)
-    {
-        default:
-            system("cls");
-            printf("Valeur incorrecte ! Echec critique !\n");
-            system("pause");
-            exit(0);
-
-        case 1:
-            //retourne dans AffichierMenu()
-            break;
-
-        case 2:
-            exit(0);
-    }
 }
 
 void AfficherMenu(int TableauInt[10][10]){
@@ -431,19 +412,18 @@ void AfficherMenu(int TableauInt[10][10]){
     printf("~~~~~~~~~~\\    BATAILLE NAVALE    /~~~~~~~~~~\n");
     printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n");
     printf("---------------------------------------------\n");
-    printf("1.Jouer avec la grille de base\n");
+    printf("1.Jouer avec une grille générée aléatoirement\n");
     printf("2.Jouer avec une grille choisie aléatoirement\n");
     printf("3.Aide\n");
     printf("4.Scores\n");
-    printf("5.Créateur de grille aléatoire\n");
-    printf("6.Quitter\n");
+    printf("5.Quitter\n");
     printf("---------------------------------------------\n");
     printf("\nBateau ASCII par Christopher Johnson\n");
     printf("https://asciiart.website/index.php?art=transportation/nautical\n");
 
     int ChoixMenu = 0;
     scanf("%d",&ChoixMenu);
-    if(ChoixMenu > 6 || ChoixMenu < 1)
+    if(ChoixMenu > 5 || ChoixMenu < 1)
     {
         printf("Aie aie aie ! Valeur non correcte !\n");
         system("pause");
@@ -456,9 +436,9 @@ void AfficherMenu(int TableauInt[10][10]){
             //rien ici
             break;
 
-        case 1: //JOUER AVEC LA CARTE DE BASE
-            system("cls");
-            //Sort du switch et commence le dans le main.c
+        case 1: //JOUER AVEC UNE GRILLE GENEREE ALEATOIREMENT
+            GrilleRandom(TableauInt);
+            //Sors ensuite de la boucle directement avec le nouveau tableau
             break;
 
         case 2: //JOUER AVEC UNE CARTE STOCKEE DANS UN FICHIER
@@ -493,13 +473,7 @@ void AfficherMenu(int TableauInt[10][10]){
             AfficherMenu(TableauInt); //retourne au menu
             break;
 
-
-        case 5:
-            GrilleRandom(TableauInt);
-            //Sors ensuite de la boucle directement avec le nouveau tableau
-            break;
-
-        case 6://QUITTER
+        case 5://QUITTER
             exit(0); //Termine le programme
 
     }
