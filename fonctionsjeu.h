@@ -230,7 +230,7 @@ void EnregistrerScore(int ScoreFinal){
     }
 
     Fichier = fopen("Scores.BATAILLENAVALE", "w+"); //réouvre le fichier pour mettre les nouveaux scores
-    for(i = 9;i > -1;i--) //Cette boucle insère les nouveaux score dans le fichier score et retire le pire score (le 11ème)
+    for(i = 11;i > 0;i--) //Cette boucle insère les nouveaux score dans le fichier score et retire le pire score (le 11ème)
     {
         fprintf(Fichier,"%d\n",TableauScores[i]);
     }
@@ -390,12 +390,12 @@ void GrilleRandom(int Tableau[10][10]){
             fprintf(fichiergrille,"%d\n",Tableau[i][j]); //Place le tableau dans le fichier
         }
     }
+    fclose(fichiergrille);//ferme le fichier.
     system("cls");
     printf("Creation terminée.\n");
     printf("grille %s créé !\n",nomfichier);
     printf("Démarrage du jeu...\n\n");
     system("pause");
-    fclose(fichiergrille);//ferme le fichier.
     system("cls");
 }
 
@@ -423,7 +423,7 @@ void AfficherMenu(int TableauInt[10][10]){
 
     int ChoixMenu = 0;
     scanf("%d",&ChoixMenu);
-    if(ChoixMenu > 5 || ChoixMenu < 1)
+    if(ChoixMenu > 6 || ChoixMenu < 1)
     {
         printf("Aie aie aie ! Valeur non correcte !\n");
         system("pause");
