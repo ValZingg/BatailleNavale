@@ -11,6 +11,11 @@
 #include "aidejeu.h"
 #include <time.h>
 
+#define CORVETTESIZE 1;
+#define FREGATESIZE 2;
+#define DESTROYERSIZE 3;
+#define CUIRASSESIZE 4;
+
 #define STLC 218 // ┌
 #define STRC 191 // ┐
 #define SBLC 192 // └
@@ -169,7 +174,7 @@ int TraducteurGrille(char Lettrechoix){
 
 const char* choixficher(int chiffre){
     const char * randomfichier ="null";
-
+    //!Cette fonction utilise le int random passé dans la fonction pour choisir une carte aléatoirement
     if(chiffre == 0)
     {
         randomfichier = "CartesCustom/CarteCustom1.BATAILLENAVALE";
@@ -191,10 +196,10 @@ const char* choixficher(int chiffre){
 void EnregistrerScore(int ScoreFinal){
     int TableauScores[11]; // Tableau des scores , va être copié dans le fichier score
     int nbmax = 11; //taille maximum du tableau
-    int temp = 0;
+    int temp = 0; //Stocke temporairement une valeur du tableau dans une boucle
     int i;
     int j;
-    int chiffre;
+    int chiffre; //Variable de stockage temporaire pour le tableau
     FILE * Fichier;
 
     Fichier = fopen("Scores.BATAILLENAVALE", "r");
@@ -264,6 +269,155 @@ void ScoresAffiche(){ //Fonction presque identique à EnregistrerScore() , Celle
     system("cls");
 }
 
+void GrilleRandom(int Tableau[10][10]){
+    int casesrestantes = 100; //Nombre de case de grille a placer restantes
+    int casesEau = 90; // Nombre de cases d'eau restante à placer dans la grille
+    srand(time(NULL)); //initialisation pour le random
+    int random = 0; // Chiffre aléatoire
+    int ligne = 0;
+    int colonne = 0;
+    int i = 0;
+    int j = 0;
+
+    bool Bateau1_Place = false; //Pour savoir si la corvette a étée placée
+    bool Bateau2_Place = false; //Pour savoir si la fregate a étée placée
+    bool Bateau3_Place = false; //Pour savoir si le destroyer a étée placée
+    bool Bateau4_Place = false; //Pour savoir si le cuirassé a étée placée
+
+    bool PlacementTermine = false;
+
+    while(PlacementTermine == false) // Boucle de création
+    {
+        random = rand()%11; //genère un chiffre random a chaque debut de boucle
+
+        switch(random)
+        {
+            default:
+                printf("Erreur !\n");
+                exit(0);
+
+            case 0:
+            case 5: //SI LE CHIFFRE EST 0 , 5 , 6 , 7 , 8 , 9 , 10: Place une case d'eau
+            case 6: //Le switch pour l'eau possède plus de "cases" pour éviter que les bateaux ne soient trop collés ensembles.
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+                if(casesEau > 0)
+                {
+                    Tableau[ligne][colonne] = 0; //assigne la case comme de l'eau
+                    casesEau--;
+                    casesrestantes--;
+                    colonne++; //avance à la prochaine case
+                }
+                break;
+
+            case 1: //SI LE RANDOM TOMBE SUR 1 , PLACE LA CORVETTE
+                if(Bateau1_Place == false)
+                {
+                    Tableau[ligne][colonne] = CORVETTESIZE; //Assigne la corvette a cette case du tableau
+                    casesrestantes--;
+                    colonne++;
+                    Bateau1_Place = true;
+                }
+                break;
+
+            case 2: // FREGATE
+                if(Bateau2_Place == false)
+                {
+                    for(i = 0;i < 2;i++)
+                    {
+                        Tableau[ligne][colonne] = FREGATESIZE;
+                        colonne++;
+                        casesrestantes--;
+                    }
+                    Bateau2_Place = true;
+                }
+                break;
+
+            case 3: //destroyer
+                if(Bateau3_Place == false)
+                {
+                    for(i = 0;i < 3;i++)
+                    {
+                        Tableau[ligne][colonne] = DESTROYERSIZE;
+                        colonne++;
+                        casesrestantes--;
+                    }
+                    Bateau3_Place = true;
+                }
+                break;
+
+            case 4: //Cuirassé
+                if(Bateau4_Place == false)
+                {
+                    for(i = 0;i < 4;i++)
+                    {
+                        Tableau[ligne][colonne] = CUIRASSESIZE;
+                        colonne++;
+                        casesrestantes--;
+                    }
+                    Bateau4_Place = true;
+                }
+                break;
+        }
+        if(colonne == 9) //sautage de ligne
+        {
+            colonne = 0;
+            ligne++;
+        }
+        if(casesrestantes == 0) //Si il n'y a plus de cases a placer , quitte la boucle
+        {
+            PlacementTermine = true;
+            break;
+        }
+    }
+
+    //ECRITURE DE LA GRILLE DANS UN FICHIER
+    system("cls");
+    char nomfichier[255] ="NULL";
+    printf("Entrez un nom de fichier...\n");
+    scanf("%s",nomfichier); //demande au joueur d'entrer le nom du fichier
+    strcat(nomfichier, ".BATAILLENAVALE"); // ajoute le suffixe .BATAILLENAVALE
+
+
+    FILE *fichiergrille;
+    fichiergrille = fopen(nomfichier, "w+"); //Crée le fichier ou le remplace si il a le même nom
+    for(i = 0;i < 10;i++)
+    {
+        for(j = 0;j < 10;j++)
+        {
+            fprintf(fichiergrille,"%d\n",Tableau[i][j]); //Place le tableau dans le fichier
+        }
+    }
+    system("cls");
+    printf("Creation terminée.\n");
+    printf("fichier %s créé !\n",nomfichier);
+    system("pause");
+    fclose(fichiergrille);//ferme le fichier.
+    system("cls");
+    printf("Voulez vous jouer directement avec cette grille ?\n");
+    printf("1.Oui");
+    printf("2.Non");
+    int choix = 0; //choix du joueur
+    scanf("%d",&choix);
+    switch(choix)
+    {
+        default:
+            system("cls");
+            printf("Valeur incorrecte ! Echec critique !\n");
+            system("pause");
+            exit(0);
+
+        case 1:
+            //retourne dans AffichierMenu()
+            break;
+
+        case 2:
+            exit(0);
+    }
+}
+
 void AfficherMenu(int TableauInt[10][10]){
     system("cls"); //nettoie l'écran
     int i = 0;//utilisé pour les boucles for
@@ -278,17 +432,18 @@ void AfficherMenu(int TableauInt[10][10]){
     printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n");
     printf("---------------------------------------------\n");
     printf("1.Jouer avec la grille de base\n");
-    printf("2.Jouer avec une grille aléatoire\n");
+    printf("2.Jouer avec une grille choisie aléatoirement\n");
     printf("3.Aide\n");
     printf("4.Scores\n");
-    printf("5.Quitter\n");
+    printf("5.Créateur de grille aléatoire\n");
+    printf("6.Quitter\n");
     printf("---------------------------------------------\n");
     printf("\nBateau ASCII par Christopher Johnson\n");
     printf("https://asciiart.website/index.php?art=transportation/nautical\n");
 
     int ChoixMenu = 0;
     scanf("%d",&ChoixMenu);
-    if(ChoixMenu > 5 || ChoixMenu < 1)
+    if(ChoixMenu > 6 || ChoixMenu < 1)
     {
         printf("Aie aie aie ! Valeur non correcte !\n");
         system("pause");
@@ -338,11 +493,19 @@ void AfficherMenu(int TableauInt[10][10]){
             AfficherMenu(TableauInt); //retourne au menu
             break;
 
-        case 5://QUITTER
+
+        case 5:
+            GrilleRandom(TableauInt);
+            //Sors ensuite de la boucle directement avec le nouveau tableau
+            break;
+
+        case 6://QUITTER
             exit(0); //Termine le programme
 
     }
 }
+
+
 
 
 
