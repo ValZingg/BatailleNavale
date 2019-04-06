@@ -86,7 +86,6 @@ int main() {
     printf("Bonjour , %s !\n",NomJoueur);
     system("pause");
     system("cls");
-
     AfficherMenu(TableauNaval); // Affiche le menu
 
     //!------------------------------BOUCLE DU JEU---------------------------------------

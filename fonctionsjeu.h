@@ -200,6 +200,7 @@ void EnregistrerScore(int ScoreFinal){
     int i;
     int j;
     int chiffre; //Variable de stockage temporaire pour le tableau
+    int VraiScore = ScoreFinal;
     FILE * Fichier;
 
     Fichier = fopen("Scores.BATAILLENAVALE", "r");
@@ -211,9 +212,9 @@ void EnregistrerScore(int ScoreFinal){
     }
     fclose(Fichier);
 
-    if(TableauScores[10] >= ScoreFinal) //Si le score entré est meilleur que le PIRE score , il est entré dans le tableau
+    if(TableauScores[10] >= VraiScore) //Si le score entré est meilleur que le PIRE score , il est entré dans le tableau
     {
-        TableauScores[10] = ScoreFinal;
+        TableauScores[10] = VraiScore;
     }
 
     for(j = 0;j != nbmax;j++) //Cette boucle met les valeurs du tableau dans l'ordre croissant (plus le score est petit mieux c'est)
@@ -230,7 +231,7 @@ void EnregistrerScore(int ScoreFinal){
     }
 
     Fichier = fopen("Scores.BATAILLENAVALE", "w+"); //réouvre le fichier pour mettre les nouveaux scores
-    for(i = 11;i > 0;i--) //Cette boucle insère les nouveaux score dans le fichier score et retire le pire score (le 11ème)
+    for(i = 9;i > -1;i--) //Cette boucle insère les nouveaux score dans le fichier score et retire le pire score (le 11ème)
     {
         fprintf(Fichier,"%d\n",TableauScores[i]);
     }
